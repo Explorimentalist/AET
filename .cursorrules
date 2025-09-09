@@ -1,0 +1,152 @@
+Cursor Rules
+
+PROJECT OVERVIEW
+	•	A website redesign for a service-booking company called AET (https://www.aet.ski).
+	•	One-man taxi service transferring clients from airports to ski resorts in the French Alps.
+	•	Clients: Individuals and families on annual ski holidays—typically affluent visitors.
+	•	Brand attributes: Genuine, Reliable, Warm, Welcoming, Experienced.
+	•	Goals: Increase quote conversions and enhance visual appeal.
+	•	Key features: Multi-step booking form, dynamic route map display.
+
+PERSONALITY
+
+Cursor should adopt a warm, detail-oriented, and reassuring tone.  It double-checks online for the latest best practices and behaves like a 10× engineer.
+
+TECH STACK
+	•	Front End: Next.js, React, Tailwind CSS, Lucide icons, flag-icons (https://github.com/lipis/flag-icons), Cloudinary for media management
+	•	Back End: Node.js
+	•	APIs & Services: MapTiler for interactive maps; Sanity CMS as the database
+	•	Version Control: GitHub
+	•	Hosting: Ionos.fr and Fasthosts.co.uk
+	
+
+ERROR FIXING PROCESS
+	1.	Explain the error in simple terms.
+	2.	Search systematically for the root cause, including internet resources.
+	3.	Summarize the solution in simple terms.
+	4.	Design tests to verify the fix.
+	5.	Document test execution and results.
+	6.	Demonstrate the fix step by step, with clear rationale.
+
+BUILDING PROCESS
+
+1) Project Directory Structure
+
+aet-ski/
+├─ .cursorignore             # Ignore .env files and Cursor-managed patterns
+├─ public/                   # Static assets (images, favicon)
+├─ src/                      # Application source code
+│   ├─ app/                  # Next.js App Router (pages or route groups)
+│   │   ├─ booking/          # Multi-step form pages (step1, step2, etc.)
+│   │   ├─ routes/           # Dynamic route-map pages
+│   │   ├─ layout.tsx        # Root layout and providers
+│   │   └─ page.tsx          # Landing page
+│   ├─ components/           # Reusable UI components
+│   ├─ lib/                  # Shared utilities (Sanity client, MapTiler client)
+│   ├─ hooks/                # Custom React hooks (useForm, useMap)
+│   ├─ styles/               # Tailwind overrides, globals.css
+│   ├─ types/                # TypeScript definitions
+│   └─ tests/                # Jest & Cypress test suites
+├─ .env.local                # Local env vars (ignored)
+├─ .env.development          # Dev environment vars (ignored)
+├─ .env.production           # Production vars (ignored)
+├─ next.config.js            # Next.js configuration
+├─ package.json              # Scripts & dependencies
+└─ README.md                 # Project overview & folder conventions
+
+2) Essential npm Scripts (in package.json)
+
+"scripts": {
+  "dev": "next dev",                 // Start dev server
+  "build": "next build",             // Create production bundle
+  "start": "next start",             // Serve production build
+  "lint": "next lint",               // ESLint checks
+  "test": "jest",                    // Run unit tests
+  "test:ci": "jest --ci --coverage", // CI-friendly tests
+  "cypress": "cypress open",         // E2E test runner
+  "cypress:run": "cypress run"       // CI-run E2E tests
+}
+
+3) Environment Variables
+	•	Store secrets in .env.local, .env.development, and .env.production.
+	•	Add all .env* patterns to .cursorignore to prevent accidental edits.
+	•	In CI (GitHub Actions), set required keys (e.g. MAPTILER_KEY, SANITY_TOKEN) as encrypted secrets.
+
+4) CI/CD Pipeline (GitHub Actions example)
+
+name: ci-cd-pipeline
+on: push:
+  branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with: node-version: '18'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test:ci
+      - run: npm run build
+      - name: Deploy to Ionos
+        uses: SamKirkland/FTP-Deploy-Action@4
+        with:
+          server: ${{ secrets.IONOS_HOST }}
+          username: ${{ secrets.IONOS_USER }}
+          password: ${{ secrets.IONOS_PASS }}
+          local-dir: .next
+          remote-dir: /var/www/aet-ski/current
+      - name: Deploy to Fasthosts
+        run: |
+          # Add SSH/FTP deploy commands here
+
+5) Deployment Directory Layout (on server)
+
+/var/www/aet-ski/
+├─ current/        # Symlink to active release
+└─ releases/
+    ├─ 20250729_1234/
+    └─ 20250730_0900/
+
+	•	Use a current symlink for zero-downtime rollbacks.
+
+6) Post-Deploy Smoke Test
+
+curl --fail https://www.aet.ski/healthz || exit 1
+
+	•	Implement a /healthz API route that returns HTTP 200.
+
+OUR .env VARIABLES
+	•	Ensure .env.local, .env.development, .env.production are listed in .cursorignore.
+
+CURRENT FILE STRUCTURE
+	•	Generate with:
+
+tree -L 4 -a -I 'node_modules|.git|__pycache__|.DS_Store|.pytest_cache|.vscode'
+
+GITHUB PUSH PROCESS
+	•	Create feature branch: git checkout -b feature/your-feature.
+	•	Commit changes with descriptive messages.
+	•	Push branch: git push origin feature/your-feature.
+	•	Open PR targeting main, assign reviewers.
+	•	After approval, merge then delete branch.
+	•	Merge triggers CI/CD pipeline.
+
+IMPORTANT
+	•	Never commit or modify .env files.
+	•	Always include meaningful comments in code.
+	•	Preserve comments unless they become obsolete.
+	•	Maintain Cursor’s brand-aligned tone.
+
+OTHER CONTEXT
+
+This file drives Cursor’s behavior for the AET.ski project, ensuring consistent automation, code standards, and deployment.
+
+COMMENTS
+	•	Prefix new code files with location comments, e.g., // src/app/booking/page.tsx.
+	•	Keep comments up to date; remove only when truly irrelevant.
+
+Tricks
+	•	File Header: Include the path at the top of each file in comments.
+	•	Search Queries: Write one-paragraph instructions to researchers, asking for code snippets or technical details.
+
