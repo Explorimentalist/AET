@@ -1,0 +1,1 @@
+- when opening a ne port/localhost go to aet-ski first
