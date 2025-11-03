@@ -220,12 +220,37 @@ These tokens specifically support AET's brand attributes:
 - **Welcoming**: Accessible contrast ratios and generous spacing
 - **Experienced**: Premium typography choices and refined details
 
+## 🔄 Recent Updates
+
+### MultiStepForm Component Refinements
+
+**Padding Optimization (Latest)**
+- Reduced step container padding from `118px` → `80px` on desktop
+- Reduced step container padding from `80px` → `64px` on mobile  
+- Applied responsive padding: `pt-8xl desktop:pt-8-5xl` across all form steps
+- Improved visual hierarchy and content accessibility
+
+**Close Button Positioning (Latest)**
+- Removed excessive desktop top spacing (`desktop:top-9xl`) from close buttons
+- Unified positioning: `top-3xl tablet:top-7xl` across all breakpoints
+- Enhanced accessibility and visual consistency
+
+**Components Updated:**
+- JourneyStep, DatesStep, PeopleStep, LuggageStep, PassengerStep, SummaryStep, SuccessStep
+
 ## 🔄 Maintenance
 
 - **Semantic Versioning**: Follow semver for token updates
 - **Backward Compatibility**: Deprecate before removing tokens
 - **Documentation**: Update component mapping with changes
 - **Testing**: Validate visual regression with token updates
+
+## 📝 Change Log
+
+### v1.1.0 - Form UX Improvements
+- **[UPDATED]** MultiStepForm padding system for better content flow
+- **[OPTIMIZED]** Close button positioning for consistent interaction patterns
+- **[ENHANCED]** Responsive behavior across mobile, tablet, and desktop breakpoints
 
 ---
 

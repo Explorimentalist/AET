@@ -1,1 +1,2 @@
 - when opening a ne port/localhost go to aet-ski first
+- Always upgrade to the aet-ski Github repository. Use cd aet-ski.
